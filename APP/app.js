@@ -4,9 +4,17 @@ app.use(express.json());
 
 // Rotas
 const alunoRoutes = require('./routes/alunoRoutes');
+const turmaRoutes = require('./routes/turmaRoutes');
 app.use('/alunos', alunoRoutes);
+app.use('/turmas', turmaRoutes);
 
 // Outras rotas podem ser adicionadas aqui
+
+// Tratamento global de erros para evitar crash do backend
+app.use((err, req, res, next) => {
+  console.error('Erro não tratado:', err.stack);
+  res.status(500).json({ erro: 'Erro interno do servidor.' });
+});
 
 app.get('/', (req, res) => res.json({ status: 'API rodando!' }));
 

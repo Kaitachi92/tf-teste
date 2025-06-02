@@ -28,7 +28,6 @@ Desenvolver um sistema completo para o gerenciamento de alunos de uma escola inf
 - **Banco de Dados:**
   - Script DDL (`banco.sql`) com tabelas principais: aluno, turma, professor, professor_turma.
   - Pronto para ser preenchido conforme o MER do grupo.
-  - Para visualizar as tabelas no banco de dados, utilize o comando `\dt`.
 
 - **Infraestrutura Docker:**
   - Dockerfile para backend e banco de dados.
