@@ -5,8 +5,10 @@ app.use(express.json());
 // Rotas
 const alunoRoutes = require('./routes/alunoRoutes');
 const turmaRoutes = require('./routes/turmaRoutes');
+const professorRoutes = require('./routes/professorRoutes');
 app.use('/alunos', alunoRoutes);
 app.use('/turmas', turmaRoutes);
+app.use('/professores', professorRoutes);
 
 // Outras rotas podem ser adicionadas aqui
 

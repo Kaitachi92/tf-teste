@@ -1,6 +1,9 @@
 import React from 'react';
 import AlunoList from '../components/AlunoList';
+import CadastroAluno from '../components/CadastroAluno';
 import ComoExecutar from '../components/ComoExecutar';
+import RelatorioGeral from '../components/RelatorioGeral';
+import ProfessorList from '../components/ProfessorList';
 import '../styles/global.scss';
 
 const App: React.FC = () => {
@@ -82,7 +85,15 @@ const App: React.FC = () => {
           </table>
         </section>
         <section className="section-card">
+          <h2>Cadastro e Lista de Alunos</h2>
+          <CadastroAluno />
           <AlunoList />
+        </section>
+        <section className="section-card">
+          <ProfessorList />
+        </section>
+        <section className="section-card">
+          <RelatorioGeral />
         </section>
       </main>
     </>

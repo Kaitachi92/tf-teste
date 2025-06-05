@@ -11,11 +11,14 @@ exports.listarAlunos = (req, res) => {
 };
 
 exports.criarAluno = (req, res) => {
-    const { nome } = req.body;
+    const { nome, turma_id } = req.body;
     if (!nome || typeof nome !== 'string') {
         return res.status(400).json({ erro: 'Nome é obrigatório.' });
     }
-    const novoAluno = { id: nextId++, nome };
+    if (typeof turma_id !== 'number' || isNaN(turma_id)) {
+        return res.status(400).json({ erro: 'Turma é obrigatória.' });
+    }
+    const novoAluno = { id: nextId++, nome, turma_id };
     alunos.push(novoAluno);
     res.status(201).json(novoAluno);
 };
@@ -29,13 +32,17 @@ exports.buscarAluno = (req, res) => {
 
 exports.atualizarAluno = (req, res) => {
     const id = parseInt(req.params.id);
-    const { nome } = req.body;
+    const { nome, turma_id } = req.body;
     const aluno = alunos.find(a => a.id === id);
     if (!aluno) return res.status(404).json({ erro: 'Aluno não encontrado.' });
     if (!nome || typeof nome !== 'string') {
         return res.status(400).json({ erro: 'Nome é obrigatório.' });
     }
+    if (typeof turma_id !== 'number' || isNaN(turma_id)) {
+        return res.status(400).json({ erro: 'Turma é obrigatória.' });
+    }
     aluno.nome = nome;
+    aluno.turma_id = turma_id;
     res.json(aluno);
 };
 
