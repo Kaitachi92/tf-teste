@@ -1,12 +1,11 @@
-const { Pool } = require('pg');
+const pool = require('../config/pg');
 
-const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'admin',
-  password: process.env.DB_PASS || 'admin',
-  database: process.env.DB_NAME || 'escola',
-  port: 5432
-});
+function validarNome(nome) {
+  return nome && typeof nome === 'string';
+}
+function validarTurmaId(turma_id) {
+  return typeof turma_id === 'number' && !isNaN(turma_id);
+}
 
 // Listar todos os professores com as turmas vinculadas (N:N)
 exports.listarProfessores = async (req, res) => {
@@ -27,10 +26,10 @@ exports.listarProfessores = async (req, res) => {
 // Criar professor e vincular a turma (N:N)
 exports.criarProfessor = async (req, res) => {
   const { nome, turma_id } = req.body;
-  if (!nome || typeof nome !== 'string') {
+  if (!validarNome(nome)) {
     return res.status(400).json({ erro: 'Nome é obrigatório.' });
   }
-  if (!turma_id || typeof turma_id !== 'number') {
+  if (!validarTurmaId(turma_id)) {
     return res.status(400).json({ erro: 'Turma é obrigatória.' });
   }
   try {
@@ -45,9 +44,9 @@ exports.criarProfessor = async (req, res) => {
       'INSERT INTO professor_turma (professor_id, turma_id) VALUES ($1, $2)',
       [professor.id, turma_id]
     );
-    res.status(201).json(professor);
+    return res.status(201).json(professor);
   } catch (err) {
-    res.status(500).json({ erro: 'Erro ao criar professor.' });
+    return res.status(500).json({ erro: 'Erro ao criar professor.' });
   }
 };
 
@@ -74,10 +73,10 @@ exports.buscarProfessor = async (req, res) => {
 exports.atualizarProfessor = async (req, res) => {
   const id = parseInt(req.params.id);
   const { nome, turma_id } = req.body;
-  if (!nome || typeof nome !== 'string') {
+  if (!validarNome(nome)) {
     return res.status(400).json({ erro: 'Nome é obrigatório.' });
   }
-  if (!turma_id || typeof turma_id !== 'number') {
+  if (!validarTurmaId(turma_id)) {
     return res.status(400).json({ erro: 'Turma é obrigatória.' });
   }
   try {
@@ -87,9 +86,9 @@ exports.atualizarProfessor = async (req, res) => {
     // Atualiza vínculo (remove todos e adiciona o novo)
     await pool.query('DELETE FROM professor_turma WHERE professor_id = $1', [id]);
     await pool.query('INSERT INTO professor_turma (professor_id, turma_id) VALUES ($1, $2)', [id, turma_id]);
-    res.json(result.rows[0]);
+    return res.json(result.rows[0]);
   } catch (err) {
-    res.status(500).json({ erro: 'Erro ao atualizar professor.' });
+    return res.status(500).json({ erro: 'Erro ao atualizar professor.' });
   }
 };
 

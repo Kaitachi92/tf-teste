@@ -1,6 +1,6 @@
-const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
+const pool = require('../config/pg');
 
 const seedsDir = path.join(__dirname, 'seeds');
 
@@ -12,15 +12,6 @@ if (!fs.existsSync(seedsDir)) {
 const files = fs.readdirSync(seedsDir)
   .filter(f => f.endsWith('.js'))
   .sort();
-
-// Configuração do pool para conectar ao banco PostgreSQL do Docker
-const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'admin',
-  password: process.env.DB_PASS || 'admin',
-  database: process.env.DB_NAME || 'escola',
-  port: 5432
-});
 
 (async () => {
   for (const file of files) {

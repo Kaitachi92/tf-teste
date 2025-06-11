@@ -6,21 +6,25 @@ let alunos = [
 ];
 let nextId = 2;
 
+function validarTurmaId(turma_id) {
+  return typeof turma_id === 'number' && !isNaN(turma_id);
+}
+
 exports.listarAlunos = (req, res) => {
     res.json(alunos);
 };
 
 exports.criarAluno = (req, res) => {
-    const { nome, turma_id } = req.body;
-    if (!nome || typeof nome !== 'string') {
-        return res.status(400).json({ erro: 'Nome é obrigatório.' });
-    }
-    if (typeof turma_id !== 'number' || isNaN(turma_id)) {
-        return res.status(400).json({ erro: 'Turma é obrigatória.' });
-    }
-    const novoAluno = { id: nextId++, nome, turma_id };
-    alunos.push(novoAluno);
-    res.status(201).json(novoAluno);
+  const { nome, turma_id } = req.body;
+  if (!nome || typeof nome !== 'string') {
+    return res.status(400).json({ erro: 'Nome é obrigatório.' });
+  }
+  if (!validarTurmaId(turma_id)) {
+    return res.status(400).json({ erro: 'Turma é obrigatória.' });
+  }
+  const novoAluno = { id: nextId++, nome, turma_id };
+  alunos.push(novoAluno);
+  res.status(201).json(novoAluno);
 };
 
 exports.buscarAluno = (req, res) => {
@@ -31,19 +35,19 @@ exports.buscarAluno = (req, res) => {
 };
 
 exports.atualizarAluno = (req, res) => {
-    const id = parseInt(req.params.id);
-    const { nome, turma_id } = req.body;
-    const aluno = alunos.find(a => a.id === id);
-    if (!aluno) return res.status(404).json({ erro: 'Aluno não encontrado.' });
-    if (!nome || typeof nome !== 'string') {
-        return res.status(400).json({ erro: 'Nome é obrigatório.' });
-    }
-    if (typeof turma_id !== 'number' || isNaN(turma_id)) {
-        return res.status(400).json({ erro: 'Turma é obrigatória.' });
-    }
-    aluno.nome = nome;
-    aluno.turma_id = turma_id;
-    res.json(aluno);
+  const id = parseInt(req.params.id);
+  const { nome, turma_id } = req.body;
+  const aluno = alunos.find(a => a.id === id);
+  if (!aluno) return res.status(404).json({ erro: 'Aluno não encontrado.' });
+  if (!nome || typeof nome !== 'string') {
+    return res.status(400).json({ erro: 'Nome é obrigatório.' });
+  }
+  if (!validarTurmaId(turma_id)) {
+    return res.status(400).json({ erro: 'Turma é obrigatória.' });
+  }
+  aluno.nome = nome;
+  aluno.turma_id = turma_id;
+  res.json(aluno);
 };
 
 exports.deletarAluno = (req, res) => {
