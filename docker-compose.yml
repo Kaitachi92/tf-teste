@@ -23,6 +23,7 @@ services:
       DB_USER: admin
       DB_PASS: admin
       DB_NAME: escola
+      DATABASE_URL: postgres://admin:admin@db:5432/escola
     ports:
       - "3000:3000"
   nginx:

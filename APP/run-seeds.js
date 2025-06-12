@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const pool = require('../config/pg');
+const pool = require('./config/pg');
 
 const seedsDir = path.join(__dirname, 'seeds');
 

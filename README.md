@@ -51,12 +51,27 @@ npm run dev
 - O frontend estará disponível em: http://localhost:5173
 - O proxy do Vite já está configurado para encaminhar as requisições para o backend (porta 3000)
 
-### 4. Fluxo Completo de Inicialização
+### 4. Rodando Migrations e Seeds (Banco de Dados)
+
+Após subir os containers, para criar as tabelas e popular o banco automaticamente, execute:
+
+```powershell
+# Rode as migrations (criação das tabelas)
+docker compose exec backend node run-migrations.js
+
+# Rode os seeds (popula turmas e professores)
+docker compose exec backend node run-seeds.js
+```
+
+Esses comandos garantem que o banco estará versionado e populado conforme o código.
+
+### 5. Fluxo Completo de Inicialização
 
 1. Execute `./docker-compose build` para garantir que todas as imagens estejam atualizadas.
 2. Execute `./docker-compose up` para subir backend, banco e nginx.
 3. Em outro terminal, rode o frontend com `npm run dev` dentro da pasta `frontend`.
-4. Acesse http://localhost:5173 para usar o sistema.
+4. Rode as migrations e seeds conforme acima.
+5. Acesse http://localhost:5173 para usar o sistema.
 
 ---
 
@@ -97,3 +112,7 @@ Veja mais exemplos e detalhes no código e na documentação.
 - Preencha o banco.sql com o DDL do seu MER.
 - Adicione diagramas MER e DFD na pasta Docs/.
 - Para dúvidas ou problemas, consulte os logs dos containers ou peça ajuda ao time.
+
+## Observação sobre conexão com o banco de dados
+
+A partir de junho/2025, toda a lógica de conexão com o PostgreSQL foi centralizada no arquivo `APP/config/pg.js`. Todos os controllers e scripts de seed/migration utilizam esse pool compartilhado, evitando múltiplas conexões e facilitando a manutenção. Basta importar `const pool = require('./config/pg')` para acessar o banco de forma padronizada.

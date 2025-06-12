@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 const migrationsDir = path.join(__dirname, 'migrations');
 
@@ -30,5 +31,14 @@ const pgm = {
     } else {
       console.log(`Arquivo ${file} não possui função up/handle/execute exportada.`);
     }
+  }
+
+  // Executa todas as migrations reais usando node-pg-migrate
+  try {
+    execSync('npx node-pg-migrate up', { stdio: 'inherit' });
+    console.log('Todas as migrations aplicadas com sucesso!');
+  } catch (err) {
+    console.error('Erro ao rodar as migrations:', err);
+    process.exit(1);
   }
 })();
