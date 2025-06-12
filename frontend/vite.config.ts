@@ -7,7 +7,8 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/alunos': 'http://localhost:3000',
-      '/turmas': 'http://localhost:3000'
+      '/turmas': 'http://localhost:3000',
+      '/professores': 'http://localhost:3000'
     }
   }
 });

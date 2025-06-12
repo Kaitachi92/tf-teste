@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './AlunoList.scss';
 
-type Aluno = {
-  id: number;
-  nome: string;
-  numero?: string;
-  email?: string;
-  cidade?: string;
-  bairro?: string;
-  cep?: string;
-  numero_responsavel?: string;
-  turma_id?: number;
-};
 type Turma = { id: number; nome: string };
 
-const CadastroAluno: React.FC = () => {
-  const [turmas, setTurmas] = useState<Turma[]>([]);
+type Props = {
+  turmas: Turma[];
+  fetchAlunos: () => void;
+};
+
+const CadastroAluno: React.FC<Props> = ({ turmas, fetchAlunos }) => {
   const [form, setForm] = useState({
     nome: '',
     numero: '',
@@ -27,14 +20,6 @@ const CadastroAluno: React.FC = () => {
     turma_id: ''
   });
   const [loading, setLoading] = useState(false);
-
-  const fetchTurmas = () => {
-    fetch('/turmas').then(res => res.json()).then(setTurmas);
-  };
-
-  useEffect(() => {
-    fetchTurmas();
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -60,6 +45,7 @@ const CadastroAluno: React.FC = () => {
     });
     setForm({ nome: '', numero: '', email: '', cidade: '', bairro: '', cep: '', numero_responsavel: '', turma_id: '' });
     setLoading(false);
+    fetchAlunos();
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './AlunoList.scss';
 
 type Aluno = {
@@ -8,49 +8,20 @@ type Aluno = {
 };
 type Turma = { id: number; nome: string };
 
-const AlunoList: React.FC = () => {
-  const [alunos, setAlunos] = useState<Aluno[]>([]);
-  const [nome, setNome] = useState('');
-  const [turmaId, setTurmaId] = useState<number | ''>('');
-  const [turmas, setTurmas] = useState<Turma[]>([]);
-  const [loading, setLoading] = useState(false);
+type Props = {
+  alunos: Aluno[];
+  turmas: Turma[];
+  fetchAlunos: () => void;
+  loading: boolean;
+};
+
+const AlunoList: React.FC<Props> = ({ alunos, turmas, fetchAlunos, loading }) => {
   const [editId, setEditId] = useState<number | null>(null);
   const [editNome, setEditNome] = useState('');
   const [editTurmaId, setEditTurmaId] = useState<number | ''>('');
   const [search, setSearch] = useState('');
 
-  const fetchAlunos = () => {
-    setLoading(true);
-    fetch('/alunos')
-      .then(res => res.json())
-      .then(data => setAlunos(data))
-      .finally(() => setLoading(false));
-  };
-  const fetchTurmas = () => {
-    fetch('/turmas').then(res => res.json()).then(setTurmas);
-  };
-
-  useEffect(() => {
-    fetchAlunos();
-    fetchTurmas();
-  }, []);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!nome.trim() || !turmaId) return;
-    setLoading(true);
-    await fetch('/alunos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nome, turma_id: turmaId })
-    });
-    setNome('');
-    setTurmaId('');
-    fetchAlunos();
-  };
-
   const handleDelete = async (id: number) => {
-    setLoading(true);
     await fetch(`/alunos/${id}`, { method: 'DELETE' });
     fetchAlunos();
   };
@@ -88,7 +59,6 @@ const AlunoList: React.FC = () => {
         />
         <button className="btn-pill" type="button" onClick={() => setSearch('')}>Limpar</button>
       </div>
-      {/* Removido formulário antigo de cadastro de aluno simplificado */}
       {loading ? <p>Carregando...</p> : (
         <ul>
           {alunos

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AlunoList from '../components/AlunoList';
 import CadastroAluno from '../components/CadastroAluno';
 import ComoExecutar from '../components/ComoExecutar';
@@ -6,7 +6,40 @@ import RelatorioGeral from '../components/RelatorioGeral';
 import ProfessorList from '../components/ProfessorList';
 import '../styles/global.scss';
 
+type Aluno = {
+  id: number;
+  nome: string;
+  turma_id?: number;
+  // outros campos opcionais
+};
+type Turma = { id: number; nome: string };
+
 const App: React.FC = () => {
+  const [alunos, setAlunos] = useState<Aluno[]>([]);
+  const [turmas, setTurmas] = useState<Turma[]>([]);
+  const [loadingAlunos, setLoadingAlunos] = useState(false);
+  const [loadingTurmas, setLoadingTurmas] = useState(false);
+
+  const fetchAlunos = () => {
+    setLoadingAlunos(true);
+    fetch('/alunos')
+      .then(res => res.json())
+      .then(setAlunos)
+      .finally(() => setLoadingAlunos(false));
+  };
+  const fetchTurmas = () => {
+    setLoadingTurmas(true);
+    fetch('/turmas')
+      .then(res => res.json())
+      .then(setTurmas)
+      .finally(() => setLoadingTurmas(false));
+  };
+
+  useEffect(() => {
+    fetchAlunos();
+    fetchTurmas();
+  }, []);
+
   return (
     <>
       <header>
@@ -86,8 +119,8 @@ const App: React.FC = () => {
         </section>
         <section className="section-card">
           <h2>Cadastro e Lista de Alunos</h2>
-          <CadastroAluno />
-          <AlunoList />
+          <CadastroAluno turmas={turmas} fetchAlunos={fetchAlunos} />
+          <AlunoList alunos={alunos} turmas={turmas} fetchAlunos={fetchAlunos} loading={loadingAlunos} />
         </section>
         <section className="section-card">
           <ProfessorList />

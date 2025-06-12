@@ -24,6 +24,13 @@ const RelatorioGeral: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Função auxiliar para mostrar nomes dos professores vinculados à turma do aluno
+  function getProfessoresDaTurma(turmaId: number | undefined) {
+    if (!turmaId) return '-';
+    const profs = professores.filter(p => Array.isArray(p.turmas) && p.turmas.includes(turmaId));
+    return profs.length > 0 ? profs.map(p => p.nome).join(', ') : '-';
+  }
+
   return (
     <div className="aluno-list">
       <h2>Alunos, Turmas e Professores</h2>
@@ -38,15 +45,11 @@ const RelatorioGeral: React.FC = () => {
         <tbody>
           {alunos.map(aluno => {
             const turma = turmas.find(t => t.id === aluno.turma_id);
-            // Agora busca professores que têm a turma do aluno no array de turmas
-            const professoresDaTurma = turma
-              ? professores.filter(p => Array.isArray(p.turmas) && p.turmas.includes(turma.id))
-              : [];
             return (
               <tr key={aluno.id}>
                 <td>{aluno.nome}</td>
                 <td>{turma ? turma.nome : '-'}</td>
-                <td>{professoresDaTurma.length > 0 ? professoresDaTurma.map(p => p.nome).join(', ') : '-'}</td>
+                <td>{getProfessoresDaTurma(aluno.turma_id)}</td>
               </tr>
             );
           })}
