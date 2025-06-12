@@ -22,15 +22,19 @@ const pgm = {
     if (typeof migration.up === 'function') {
       console.log(`Executando migration: ${file}`);
       await migration.up(pgm);
-    } else if (typeof migration.handle === 'function') {
+      continue;
+    }
+    if (typeof migration.handle === 'function') {
       console.log(`Executando handle: ${file}`);
       await migration.handle();
-    } else if (typeof migration.execute === 'function') {
+      continue;
+    }
+    if (typeof migration.execute === 'function') {
       console.log(`Executando execute: ${file}`);
       await migration.execute();
-    } else {
-      console.log(`Arquivo ${file} não possui função up/handle/execute exportada.`);
+      continue;
     }
+    console.log(`Arquivo ${file} não possui função up/handle/execute exportada.`);
   }
 
   // Executa todas as migrations reais usando node-pg-migrate
