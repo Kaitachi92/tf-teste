@@ -2,7 +2,6 @@
   "name": "escola-backend",
   "version": "1.0.0",
   "main": "app.js",
-  "type": "commonjs",
   "scripts": {
     "start": "node app.js",
     "migrate": "DATABASE_URL=postgres://admin:admin@db:5432/escola node-pg-migrate up",

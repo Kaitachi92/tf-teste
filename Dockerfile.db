@@ -3,4 +3,3 @@ FROM postgres:16-alpine
 ENV POSTGRES_DB=escola
 ENV POSTGRES_USER=admin
 ENV POSTGRES_PASSWORD=admin
-COPY banco.sql /docker-entrypoint-initdb.d/
