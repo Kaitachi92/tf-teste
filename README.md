@@ -1,30 +1,33 @@
 # Sistema de Gerenciamento Escolar Infantil
 
-## Visão Geral
-Sistema completo para gerenciamento de alunos, turmas e professores de uma escola infantil. Inclui backend (Node.js/Express), frontend (React + TypeScript + Vite), banco de dados PostgreSQL e infraestrutura Docker.
+Um sistema completo para gestão de alunos, turmas, professores, responsáveis, mensalidades, biblioteca e eventos de uma escola infantil.
 
 ---
 
-## Estrutura do Projeto
+## Descrição
 
-- **APP/**: Backend Node.js/Express (rotas, controllers, models)
-- **frontend/**: Frontend React + TypeScript + Vite + Sass
-- **Docs/**: Documentação visual (MER, DFD, prints)
-- **banco.sql**: Script DDL do banco de dados (referência)
-- **Dockerfile, Dockerfile.db, docker-compose.yml, nginx.conf**: Infraestrutura Docker e proxy reverso
-- **start-tudo.ps1**: Script único para subir todo o ambiente (backend, banco, frontend)
-- **README.md**: Documentação detalhada do projeto
+Este projeto visa facilitar o controle acadêmico, financeiro e administrativo de escolas infantis, centralizando informações de alunos, professores, turmas, responsáveis, mensalidades, biblioteca, eventos e mais. O sistema é composto por backend (Node.js/Express), frontend (React + TypeScript + Vite), banco de dados PostgreSQL e infraestrutura Docker.
 
 ---
 
-## Inicialização Completa do Projeto
+## Tecnologias Utilizadas
 
-### 1. Pré-requisitos
-- Docker e Docker Compose instalados ([Download Docker Desktop](https://www.docker.com/products/docker-desktop/))
-- Windows PowerShell (recomendado para rodar o script único)
+- **Backend:** Node.js, Express, PostgreSQL, node-pg-migrate
+- **Frontend:** React, TypeScript, Vite, Sass
+- **Banco de Dados:** PostgreSQL
+- **Infraestrutura:** Docker, Docker Compose, Nginx
+- **Scripts:** PowerShell (`start-tudo.ps1`)
+
+---
+
+## Como Instalar/Configurar
+
+### Pré-requisitos
+- Docker e Docker Compose ([Download Docker Desktop](https://www.docker.com/products/docker-desktop/))
+- Windows PowerShell (recomendado)
 - Node.js (apenas se for rodar o frontend fora do Docker)
 
-### 2. Subindo TUDO com um único comando (recomendado)
+### Instalação Rápida (Recomendado)
 
 Abra o PowerShell na raiz do projeto e execute:
 
@@ -41,7 +44,7 @@ Esse script irá:
 Acesse o frontend em: [http://localhost:5173](http://localhost:5173)
 Acesse a API backend em: [http://localhost:3000](http://localhost:3000)
 
-### 3. Subindo manualmente (opcional)
+### Instalação Manual (Opcional)
 
 ```powershell
 # (1) Construa as imagens Docker
@@ -64,38 +67,49 @@ npm run dev
 
 ---
 
-## Endpoints e Acesso ao Banco
+## Como Usar
 
-- **API de alunos:** [http://localhost:3000/alunos](http://localhost:3000/alunos)
-- **API de professores:** [http://localhost:3000/professores](http://localhost:3000/professores)
-- **API de turmas:** [http://localhost:3000/turmas](http://localhost:3000/turmas)
+- Acesse o frontend em [http://localhost:5173](http://localhost:5173) para utilizar o sistema via interface web.
+- Acesse a API REST em [http://localhost:3000](http://localhost:3000) para integração ou testes com ferramentas como Postman.
+- Exemplos de endpoints:
+  - [http://localhost:3000/alunos](http://localhost:3000/alunos)
+  - [http://localhost:3000/professores](http://localhost:3000/professores)
+  - [http://localhost:3000/turmas](http://localhost:3000/turmas)
+  - [http://localhost:3000/disciplinas](http://localhost:3000/disciplinas)
+  - [http://localhost:3000/mensalidades](http://localhost:3000/mensalidades)
 
-### Estrutura das principais tabelas criadas via migrations:
+---
 
-- **responsaveis**: Dados dos responsáveis pelos alunos (id, nome, parentesco, telefone, email, endereço)
-- **alunos**: Dados dos alunos (id, nome, data_nascimento, cpf, rg, sexo, endereço, email, telefone, responsavel_id)
-- **turmas**: Turmas da escola (id, nome, ano_letivo, turno, nivel_ensino)
-- **professores**: Professores cadastrados (id, nome, formação, email, telefone)
-- **disciplinas**: Disciplinas oferecidas (id, nome, carga_horaria, ano_serie)
-- **professor_turma**: Relacionamento entre professores e turmas (id, professor_id, turma_id)
-- **professores_disciplinas**: Relacionamento entre professores, disciplinas e turmas (chave composta: professor_id, disciplina_id, turma_id)
-- **usuarios**: Usuários do sistema (id, nome, email, senha_hash, tipo_usuario)
-- **mensalidades**: Mensalidades dos alunos (id, aluno_id, referencia_mes, valor, status, data_vencimento, data_pagamento)
-- **livros**: Livros da biblioteca (id, titulo, autor, editora, ano, isbn, quantidade_total, quantidade_disponivel)
-- **emprestimos**: Empréstimos de livros (id, livro_id, aluno_id, data_emprestimo, data_devolucao, status)
-- **eventos**: Eventos escolares (id, titulo, descricao, data_inicio, data_fim, tipo_evento)
-- **calendario_letivo**: Datas do calendário escolar (id, data, descricao, letivo)
-- **avisos**: Avisos enviados (id, titulo, mensagem, destinatario_tipo, data_envio, autor_id)
-- **ocorrencias**: Ocorrências disciplinares (id, aluno_id, descricao, tipo_ocorrencia, data, professor_id)
+## Contribuição
 
-- **Banco de dados PostgreSQL:**
-  - Host: `localhost`
-  - Porta: `5432`
-  - Usuário: `admin`
-  - Senha: `admin`
-  - Banco: `escola`
+Contribuições são bem-vindas! Para colaborar:
 
-Você pode acessar o banco via DBeaver, TablePlus, ou outro cliente PostgreSQL para visualizar todas as tabelas e seus dados.
+1. Faça um fork do projeto
+2. Crie uma branch (`git checkout -b feature/nome-da-feature`)
+3. Commit suas alterações (`git commit -m 'feat: nova funcionalidade'`)
+4. Faça push para sua branch (`git push origin feature/nome-da-feature`)
+5. Abra um Pull Request
+
+**Regras:**
+- Siga o padrão de código já existente (JavaScript/TypeScript padrão, nomes claros)
+- Descreva claramente o que sua contribuição faz
+- Sempre que possível, adicione testes e documentação
+
+---
+
+## Licença
+
+Distribuído sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+
+---
+
+## Documentação Detalhada (Wiki)
+
+Acesse a [Wiki do Projeto](https://github.com/SEU_USUARIO/SEU_REPOSITORIO/wiki) para:
+- Visão geral arquitetural e diagramas
+- Casos de uso detalhados
+- Guia de desenvolvimento (estrutura de pastas, convenções, testes)
+- Histórico de versões (Changelog)
 
 ---
 

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import AlunoList from '../components/AlunoList';
 import CadastroAluno from '../components/CadastroAluno';
-import ComoExecutar from '../components/ComoExecutar';
 import RelatorioGeral from '../components/RelatorioGeral';
 import ProfessorList from '../components/ProfessorList';
+import ResponsavelList from '../components/ResponsavelList';
+import DisciplinaList from '../components/DisciplinaList';
+import MensalidadeList from '../components/MensalidadeList';
+import TurmaList from '../components/TurmaList';
 import '../styles/global.scss';
 
 type Aluno = {
@@ -13,12 +16,23 @@ type Aluno = {
   // outros campos opcionais
 };
 type Turma = { id: number; nome: string };
+type Responsavel = {
+  id: number;
+  nome: string;
+  parentesco: string;
+  telefone: string;
+  email: string;
+  endereco: string;
+};
 
 const App: React.FC = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [turmas, setTurmas] = useState<Turma[]>([]);
+  const [responsaveis, setResponsaveis] = useState<Responsavel[]>([]);
   const [loadingAlunos, setLoadingAlunos] = useState(false);
   const [loadingTurmas, setLoadingTurmas] = useState(false);
+  const [loadingResponsaveis, setLoadingResponsaveis] = useState(false);
+  const [aba, setAba] = useState('alunos');
 
   const fetchAlunos = () => {
     setLoadingAlunos(true);
@@ -34,10 +48,18 @@ const App: React.FC = () => {
       .then(setTurmas)
       .finally(() => setLoadingTurmas(false));
   };
+  const fetchResponsaveis = () => {
+    setLoadingResponsaveis(true);
+    fetch('/responsaveis')
+      .then(res => res.json())
+      .then(setResponsaveis)
+      .finally(() => setLoadingResponsaveis(false));
+  };
 
   useEffect(() => {
     fetchAlunos();
     fetchTurmas();
+    fetchResponsaveis();
   }, []);
 
   return (
@@ -46,88 +68,52 @@ const App: React.FC = () => {
         <h1>Sistema de Gerenciamento Escolar Infantil - Backend</h1>
         <p>Organização, clareza e eficiência no gerenciamento escolar.</p>
       </header>
-      <nav>
-        <a href="#sobre">Sobre o Projeto</a>
-        <a href="#estrutura">Estrutura do Repositório</a>
-        <a href="#documentacao">Documentação Técnica</a>
-        <a href="#execucao">Como Executar (Docker)</a>
-        <a href="#rotas">Rotas da API</a>
+      <nav style={{ display: 'flex', gap: 16, margin: '24px 0' }}>
+        <button className={aba === 'alunos' ? 'btn-pill active' : 'btn-pill'} onClick={() => setAba('alunos')}>Alunos</button>
+        <button className={aba === 'professores' ? 'btn-pill active' : 'btn-pill'} onClick={() => setAba('professores')}>Professores</button>
+        <button className={aba === 'turmas' ? 'btn-pill active' : 'btn-pill'} onClick={() => setAba('turmas')}>Turmas</button>
+        <button className={aba === 'responsaveis' ? 'btn-pill active' : 'btn-pill'} onClick={() => setAba('responsaveis')}>Responsáveis</button>
+        <button className={aba === 'disciplinas' ? 'btn-pill active' : 'btn-pill'} onClick={() => setAba('disciplinas')}>Disciplinas</button>
+        <button className={aba === 'mensalidades' ? 'btn-pill active' : 'btn-pill'} onClick={() => setAba('mensalidades')}>Mensalidades</button>
+        <button className={aba === 'relatorio' ? 'btn-pill active' : 'btn-pill'} onClick={() => setAba('relatorio')}>Relatório Geral</button>
       </nav>
       <main className="container">
-        <section id="sobre" className="section-card">
-          <h2>Sobre o Projeto</h2>
-          <p>Este sistema visa facilitar o gerenciamento escolar infantil, oferecendo backend robusto, documentação clara e integração via API RESTful.</p>
-        </section>
-        <section id="estrutura" className="section-card">
-          <h2>Estrutura do Repositório</h2>
-          <div className="code-block">
-            <pre>{`
-/ (raiz)
-├── APP/                # Backend: rotas, controladores, models
-│   ├── controllers/    # Lógica das rotas (ex: alunoController.js)
-│   ├── models/         # Modelos das entidades do MER (ex: aluno.js)
-│   ├── routes/         # Definição das rotas REST (ex: alunoRoutes.js)
-│   └── app.js          # Arquivo principal do backend
-├── Docs/               # Documentação técnica (MER, DFD)
-├── banco.sql           # Script DDL do banco de dados
-├── Dockerfile          # Backend
-├── Dockerfile.db       # Banco de dados
-├── docker-compose.yml  # Orquestração
-├── nginx.conf          # Proxy reverso
-└── README.md           # Documentação
-`}</pre>
-          </div>
-        </section>
-        <section id="documentacao" className="section-card">
-          <h2>Documentação Técnica</h2>
-          <ul>
-            <li>MER: <span role="img" aria-label="diagrama">🗂️</span> <i>Adicione o diagrama na pasta Docs/</i></li>
-            <li>DFD: <span role="img" aria-label="fluxo">🔄</span> <i>Adicione o diagrama na pasta Docs/</i></li>
-          </ul>
-        </section>
-        <section id="execucao" className="section-card">
-          <ComoExecutar />
-        </section>
-        <section id="rotas" className="section-card">
-          <h2>Rotas da API</h2>
-          <table className="api-table">
-            <thead>
-              <tr>
-                <th>Método</th>
-                <th>Endpoint</th>
-                <th>Descrição</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>GET</td>
-                <td>/alunos</td>
-                <td>Lista todos os alunos</td>
-              </tr>
-              <tr>
-                <td>POST</td>
-                <td>/alunos</td>
-                <td>Cria um novo aluno</td>
-              </tr>
-              <tr>
-                <td>GET</td>
-                <td>/turmas</td>
-                <td>Lista todas as turmas</td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-        <section className="section-card">
-          <h2>Cadastro e Lista de Alunos</h2>
-          <CadastroAluno turmas={turmas} fetchAlunos={fetchAlunos} />
-          <AlunoList alunos={alunos} turmas={turmas} fetchAlunos={fetchAlunos} loading={loadingAlunos} />
-        </section>
-        <section className="section-card">
-          <ProfessorList />
-        </section>
-        <section className="section-card">
-          <RelatorioGeral />
-        </section>
+        {aba === 'alunos' && (
+          <section className="section-card">
+            <CadastroAluno turmas={turmas} fetchAlunos={fetchAlunos} fetchResponsaveis={fetchResponsaveis} />
+            <AlunoList alunos={alunos} turmas={turmas} fetchAlunos={fetchAlunos} loading={loadingAlunos} />
+          </section>
+        )}
+        {aba === 'professores' && (
+          <section className="section-card">
+            <ProfessorList />
+          </section>
+        )}
+        {aba === 'turmas' && (
+          <section className="section-card">
+            <TurmaList />
+          </section>
+        )}
+        {aba === 'responsaveis' && (
+          <section className="section-card">
+            <ResponsavelList responsaveis={responsaveis} loading={loadingResponsaveis} fetchResponsaveis={fetchResponsaveis} />
+          </section>
+        )}
+        {aba === 'disciplinas' && (
+          <section className="section-card">
+            <DisciplinaList />
+          </section>
+        )}
+        {aba === 'mensalidades' && (
+          <section className="section-card">
+            <MensalidadeList />
+          </section>
+        )}
+        {aba === 'relatorio' && (
+          <section className="section-card">
+            <RelatorioGeral />
+          </section>
+        )}
       </main>
     </>
   );

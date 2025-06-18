@@ -6,9 +6,15 @@ app.use(express.json());
 const alunoRoutes = require('./routes/alunoRoutes');
 const turmaRoutes = require('./routes/turmaRoutes');
 const professorRoutes = require('./routes/professorRoutes');
+const responsavelRoutes = require('./routes/responsavelRoutes');
+const disciplinaRoutes = require('./routes/disciplinaRoutes');
+const mensalidadeRoutes = require('./routes/mensalidadeRoutes');
 app.use('/alunos', alunoRoutes);
 app.use('/turmas', turmaRoutes);
 app.use('/professores', professorRoutes);
+app.use('/responsaveis', responsavelRoutes);
+app.use('/disciplinas', disciplinaRoutes);
+app.use('/mensalidades', mensalidadeRoutes);
 
 // Outras rotas podem ser adicionadas aqui
 

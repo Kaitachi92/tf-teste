@@ -6,9 +6,10 @@ type Turma = { id: number; nome: string };
 type Props = {
   turmas: Turma[];
   fetchAlunos: () => void;
+  fetchResponsaveis: () => void;
 };
 
-const CadastroAluno: React.FC<Props> = ({ turmas, fetchAlunos }) => {
+const CadastroAluno: React.FC<Props> = ({ turmas, fetchAlunos, fetchResponsaveis }) => {
   const [form, setForm] = useState({
     nome: '',
     numero: '',
@@ -46,6 +47,7 @@ const CadastroAluno: React.FC<Props> = ({ turmas, fetchAlunos }) => {
     setForm({ nome: '', numero: '', email: '', cidade: '', bairro: '', cep: '', numero_responsavel: '', turma_id: '' });
     setLoading(false);
     fetchAlunos();
+    fetchResponsaveis();
   };
 
   return (
