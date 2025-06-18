@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const turmaController = require('../controllers/turmaController');
+const Turma = require('../models/turma'); // seu modelo simples
 
-router.get('/', turmaController.listarTurmas);
-router.post('/', turmaController.criarTurma);
-router.get('/:id', turmaController.buscarTurma);
-router.put('/:id', turmaController.atualizarTurma);
-router.delete('/:id', turmaController.deletarTurma);
+const turmas = [
+  new Turma(1, '1º Ano A'),
+  new Turma(2, '1º Ano B'),
+  new Turma(3, '2º Ano A'),
+];
+
+router.get('/', (req, res) => {
+  res.json(turmas); // aqui retorna o array
+});
 
 module.exports = router;
