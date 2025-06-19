@@ -8,10 +8,11 @@
     "migrate-down": "DATABASE_URL=postgres://admin:admin@db:5432/escola node-pg-migrate down"
   },
   "dependencies": {
+    "dotenv": "^16.5.0",
     "express": "^4.19.2",
     "pg": "^8.16.0"
   },
   "devDependencies": {
-    "node-pg-migrate": "^8.0.2"
+    "node-pg-migrate": "^8.0.3"
   }
 }

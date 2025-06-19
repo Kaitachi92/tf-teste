@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Turma = require('../models/turma'); // seu modelo simples
+const Turma = require('../models/turma');
 
 const turmas = [
   new Turma(1, '1º Ano A'),
@@ -9,7 +9,7 @@ const turmas = [
 ];
 
 router.get('/', (req, res) => {
-  res.json(turmas); // aqui retorna o array
+  res.json(turmas);
 });
 
 module.exports = router;
